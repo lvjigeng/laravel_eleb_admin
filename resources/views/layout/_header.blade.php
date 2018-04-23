@@ -14,7 +14,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="">店铺管理 <span class="sr-only">(current)</span></a></li>
+                <li><a href="{{route('shopAccount')}}">店铺管理 <span class="sr-only">(current)</span></a></li>
                 <li><a href="{{route('shopCategory.index')}}">分类管理</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></a>
@@ -38,11 +38,11 @@
                 @endguest
                 @auth
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{\Illuminate\Support\Facades\Auth::user()->name}}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="">个人信息</a></li>
-                        <li><a href="">修改资料</a></li>
-                            <form action="" method="post">
+                        <li><a href="">修改个人信息</a></li>
+                        <li><a href="{{route('editPwd',['admin'=>\Illuminate\Support\Facades\Auth::user()])}}">修改密码</a></li>
+                            <form action="{{route('logout')}}" method="post">
                                 {{method_field('DELETE')}}
                                 {{csrf_field()}}
                                 <button class="btn btn-link">注销</button>

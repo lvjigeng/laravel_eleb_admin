@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Model\Category;
 use App\Model\ShopCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+    //没登录什么都做不了
+    public function __construct()
+    {
+        $this->middleware('auth',[
+
+        ]);
+    }
     //添加分类页面
     public function create()
     {
@@ -24,11 +33,11 @@ class CategoryController extends Controller
             'name.required'=>'分类名字不能为空,请添写分类名字',
             'img.required'=>'图片不能为空,请上传图片',
         ]);
-        $imgPath=$request->file('img')->store('public/shopCategory');
+
         //保存
         ShopCategory::create([
             'name'=>$request->name,
-            'img'=>$imgPath
+            'img'=>$request->img,
         ]);
         //提示
         session()->flash('success','添加分类成功');
@@ -60,13 +69,11 @@ class CategoryController extends Controller
 
         ]);
         //判断是否上传,上传了就赋给 $shopCategory->img
-        if ($request->img){
-            $shopCategory->img=$request->file('img')->store('public/shopCategory');
-        }
+
         //没上传就直接保存
         $shopCategory->update([
            'name'=>$request->name,
-           'img'=>$shopCategory->img
+           'img'=>$request->img
         ]);
         //提示
         session()->flash('success','修改分类成功');
@@ -74,4 +81,13 @@ class CategoryController extends Controller
         return redirect()->route('shopCategory.index');
 
     }
+    //删除分类
+    public function destroy(ShopCategory $shopCategory)
+    {
+        $shopCategory->delete();
+
+//        Storage::delete($shopCategory->img);
+        echo 'success';
+    }
 }
+

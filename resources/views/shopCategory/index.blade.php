@@ -14,7 +14,7 @@
             <tr data-id="{{$category->id}}">
                 <td>{{ $category->id}}</td>
                 <td>{{$category->name}}</td>
-                <td><img src="{{\Illuminate\Support\Facades\Storage::url($category->img)}}" alt="" class="img-thumbnail" width="70px"></td>
+                <td><img src="{{$category->img}}" alt="" class="img-thumbnail" width="70px"></td>
                 <td>
                     <a href="{{route('shopCategory.edit',['val'=>$category])}}" class="btn btn-default">编辑</a>
                     &emsp;<a href="" class="btn btn-danger">删除</a></td>

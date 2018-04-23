@@ -14,6 +14,7 @@ class CreateShopCategoriesTable extends Migration
     public function up()
     {
         Schema::create('shop_categories', function (Blueprint $table) {
+            $table->engine='innodb';
             $table->increments('id');
             $table->string('name');
             $table->string('img');

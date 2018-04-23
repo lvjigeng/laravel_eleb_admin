@@ -3,6 +3,7 @@
 @section('title','店铺列表')
 
 @section('content')
+    <a href="{{route('shopAccount.create')}}" class="btn btn-primary">添加商铺</a>
     <table class="table table-hover">
         <tr>
             <th>商家账号</th>

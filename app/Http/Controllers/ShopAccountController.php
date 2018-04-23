@@ -4,11 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Model\ShopAccount;
 use App\Model\ShopCategory;
+use App\Model\ShopDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ShopAccountController extends Controller
 {
-    //
+    //没登录什么都做不了
+    public function __construct()
+    {
+        $this->middleware('auth',[
+
+        ]);
+    }
+    //店铺列表
     public function index()
     {
         $shopAccounts=ShopAccount::all();
@@ -19,6 +30,68 @@ class ShopAccountController extends Controller
     {
         $shopCategories=ShopCategory::all();
         return view('shopAccount/show',compact('shopAccount','shopCategories'));
+    }
+    //添加店铺
+    public function create()
+    {
+        $shopCategories=ShopCategory::all();
+        return view('shopAccount/create',compact('shopCategories'));
+    }
+    //保存
+    public function store(Request $request)
+    {
+        //验证
+        $this->validate($request, [
+            'name' => 'required|regex:/^1[34578][0-9]{9}$/
+',
+            'password' => 'required|confirmed|min:6',
+            'shop_name' => 'required|unique:shop_details',
+            'start_send' => 'required',
+            'send_cost' => 'required',
+            'shop_img' => 'required',
+
+
+        ], [
+            'name.required' => '手机号不能为空',
+            'name.regex' => '请输入正确的手机号',
+            'password.required' => '密码不能为空',
+            'password.min' => '密码最小6位',
+            'password.confirmed' => '两次密码不一致',
+            'shop_name.required' => '店铺名字不能为空',
+            'shop_name.unique' => '店铺名字已存在',
+            'start_send.required' => '起送金额不能为空',
+            'send_cost.required' => '配送金额不能为空',
+            'shop_img.required' => '商家图片不能为空',
+
+        ]);
+        //保存图片
+
+
+        //保存
+        DB::transaction(function () use ($request) {
+
+            $ShopDetail = ShopDetail::create([
+                'shop_name' => $request->shop_name,
+                'start_send' => $request->start_send,
+                'send_cost' => $request->send_cost,
+                'send_cost' => $request->send_cost,
+                'notice' => $request->notice,
+                'discount' => $request->discount,
+                'shop_img' => $request->shop_img,
+            ]);
+
+            ShopAccount::create([
+                'name' => $request->name,
+                'password' => bcrypt($request->password),
+                'status'=>1,
+                'shop_detail_id' => $ShopDetail->id,
+            ]);
+
+
+        });
+
+        session()->flash('success', '注册成功账号,请等待审核');
+        return redirect()->route('shopAccount');
     }
     //审核通过
     public function pass(ShopAccount $shopAccount)

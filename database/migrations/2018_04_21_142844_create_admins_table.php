@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShopsTable extends Migration
+class CreateAdminsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateShopsTable extends Migration
      */
     public function up()
     {
-        Schema::create('shops', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
+            $table->engine='innodb';
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->bigInteger('phone')->unique();
             $table->string('password');
+            $table->string('name');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -30,6 +31,6 @@ class CreateShopsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shops');
+        Schema::dropIfExists('admins');
     }
 }
