@@ -38,5 +38,7 @@ Route::get('show/{shopAccount}','ShopAccountController@show')->name('show');
 Route::get('pass/{shopAccount}','ShopAccountController@pass')->name('pass');
 //审核拒绝
 Route::get('disabled/{shopAccount}','ShopAccountController@disabled')->name('disabled');
+//活动路由
+Route::resource('activity','ActivityController');
 
 

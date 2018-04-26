@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\App;
 
 class UploadController extends Controller
 {
-    //
+    //上传图片到阿里云
+
     public function upload(Request $request)
     {
         $imgPath=$request->file('file')->store($request->dir);
