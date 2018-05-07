@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','IndexController@welcome')->name('/');
 
 Route::get('index','IndexController@index')->name('index');
 //上传图片路由
