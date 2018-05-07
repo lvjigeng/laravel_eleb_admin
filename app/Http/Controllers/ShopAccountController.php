@@ -8,6 +8,7 @@ use App\Model\ShopDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ShopAccountController extends Controller
@@ -40,10 +41,12 @@ class ShopAccountController extends Controller
     //保存
     public function store(Request $request)
     {
+//        dd($request->input());
         //验证
         $this->validate($request, [
             'name' => 'required|regex:/^1[34578][0-9]{9}$/
 ',
+            'email'=>'required|regex:/\w+([-+.\']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/|unique:shopAccounts',
             'password' => 'required|confirmed|min:6',
             'shop_name' => 'required|unique:shop_details',
             'start_send' => 'required',
@@ -54,6 +57,9 @@ class ShopAccountController extends Controller
         ], [
             'name.required' => '手机号不能为空',
             'name.regex' => '请输入正确的手机号',
+            'email.required'=>'邮箱不能为空',
+            'email.regex'=>'邮箱格式不正确',
+            'email.unique'=>'邮箱已存在',
             'password.required' => '密码不能为空',
             'password.min' => '密码最小6位',
             'password.confirmed' => '两次密码不一致',
@@ -82,6 +88,7 @@ class ShopAccountController extends Controller
 
             ShopAccount::create([
                 'name' => $request->name,
+                'email'=>$request->email,
                 'password' => bcrypt($request->password),
                 'status'=>1,
                 'shop_detail_id' => $ShopDetail->id,
@@ -100,10 +107,17 @@ class ShopAccountController extends Controller
             ->update([
             'status'=>1
         ]);
+        //审核通过给他发送邮件
+        Mail::send('shopAccount/pass',['name'=>$shopAccount->name],function ($message) use ($shopAccount){
+            $message->to($shopAccount->email)->subject('店铺审核通过');
+        });
+        session()->flash('success','店铺通过审核,发送邮件成功');
         return redirect()->route('shopAccount');
 
 
     }
+
+
     //禁用账号
     public function disabled(ShopAccount $shopAccount)
     {
@@ -112,6 +126,12 @@ class ShopAccountController extends Controller
             ->update([
                 'status'=>0
         ]);
+
+        //禁用账号给他发送邮件
+        Mail::send('shopAccount/disable',['name'=>$shopAccount->name],function ($message) use ($shopAccount){
+            $message->to($shopAccount->email)->subject('店铺账号禁用');
+        });
+        session()->flash('success','店铺账号禁用,发送邮件成功');
         return redirect()->route('shopAccount');
     }
 }

@@ -92,11 +92,11 @@
                                         @if($shopAccount->status==0)
                                             <div class="row">
                                                 <div class="col-xs-3">
-                                                    <a href="{{route('pass',['shopAccount'=>$shopAccount])}}" class="btn btn-info">审核通过</a>
+                                                    <a href="{{route('shopAccount.pass',['shopAccount'=>$shopAccount])}}" class="btn btn-info">审核通过</a>
                                                 </div>
                                                 @else
                                                     <div class="col-xs-3">
-                                                        <a href="{{route('disabled',['shopAccount'=>$shopAccount])}}" class="btn btn-danger">账号禁用</a>
+                                                        <a href="{{route('shopAccount.disabled',['shopAccount'=>$shopAccount])}}" class="btn btn-danger">账号禁用</a>
                                                     </div>
                                                 @endif
                                             </div>

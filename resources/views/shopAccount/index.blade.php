@@ -16,7 +16,7 @@
             <td>{{$shopAccount->name}}</td>
             <td>{{$shopAccount->shopDetail['shop_name']}}</td>
             <td>{{$shopAccount->status==0?'未审核':'已审核'}}</td>
-            <td><a href="{{route('show',['shopAccount'=>$shopAccount])}}" class="btn btn-info">查看</a></td>
+            <td><a href="{{route('shopAccount.show',['shopAccount'=>$shopAccount])}}" class="btn btn-info">查看</a></td>
         </tr>
         @endforeach
     </table>

@@ -31,7 +31,7 @@ class LoginController extends Controller
         //验证
         if (Auth::attempt(['phone'=>$request->phone,'password'=>$request->password],$request->has('rememberMe'))){
             session()->flash('success','登录成功');
-            return redirect()->route('shopAccount');
+            return redirect()->route('index');
         }else{
 
             session()->flash('danger','密码或用户名错误');

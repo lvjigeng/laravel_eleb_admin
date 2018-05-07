@@ -14,25 +14,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{{route('shopAccount')}}">店铺管理 <span class="sr-only">(current)</span></a></li>
-                <li><a href="{{route('shopCategory.index')}}">分类管理</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{route('activity.index')}}">活动管理</a></li>
 
-                        <li><a href="">管理员列表</a></li>
-                    </ul>
-                </li>
+
+                {!! \App\Model\Menu::menus() !!}
             </ul>
-            <form class="navbar-form navbar-left" method="get" action="@yield('search')">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Search" name="keywords">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="">关于我们</a></li>
                 @guest
                 <li><a href="">登录</a></li>
                 @endguest
@@ -51,7 +37,9 @@
                     </ul>
                 </li>
                 @endauth
+
             </ul>
-        </div><!-- /.navbar-collapse -->
+        </div>
+        <!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>

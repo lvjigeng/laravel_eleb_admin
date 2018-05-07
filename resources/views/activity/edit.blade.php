@@ -18,6 +18,16 @@
             <input type="date" id="end_time" name="end_time" class="form-control"  value="{{date('Y-m-d',$activity->end_time)}}">
         </div>
 
+        <div class="form-group">
+            <label for="prize_date">开奖时间</label>
+            <input type="date" id="prize_date" name="prize_date" class="form-control"  value="{{date('Y-m-d',$activity->prize_date)}}">
+        </div>
+
+        <div class="form-group">
+            <label for="signup_num">报名人数</label>
+            <input type="number" id="signup_num" name="signup_num" class="form-control"  value="{{$activity->signup_num}}">
+        </div>
+
 
     <script id="container" name="detail" type="text/plain">
         {{strip_tags($activity->detail)}}

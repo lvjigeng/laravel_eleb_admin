@@ -9,16 +9,27 @@
             <input type="text" name="title" class="form-control" id="exampleInputName2" placeholder="分类名称" value="{{old('title')}}">
         </div>
         <div class="form-group">
-            <label for="start_time">开始时间</label>
+            <label for="start_time">报名开始时间</label>
             <input type="date" id="start_time" name="start_time" class="form-control"  value="{{old('start_time')}}">
         </div>
 
         <div class="form-group">
-            <label for="end_time">结束时间</label>
+            <label for="end_time">报名结束时间</label>
             <input type="date" id="end_time" name="end_time" class="form-control"  value="{{old('end_time')}}">
         </div>
 
+        <div class="form-group">
+            <label for="prize_date">开奖时间</label>
+            <input type="date" id="prize_date" name="prize_date" class="form-control"  value="{{old('prize_date')}}">
+        </div>
 
+        <div class="form-group">
+            <label for="signup_num">报名人数</label>
+            <input type="number" id="signup_num" name="signup_num" class="form-control"  value="{{old('signup_num')}}">
+        </div>
+
+
+    {{--富文本编辑器--}}
     <script id="container" name="detail" type="text/plain">
         {!! old('detail') !!}
     </script>

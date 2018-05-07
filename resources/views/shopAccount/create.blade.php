@@ -9,6 +9,7 @@
                     账号<input type="text" name="name" class="form-control" value="{{old('name')}}" placeholder="手机号"><br>
                     密码<input type="password" name="password" class="form-control" value="{{old('password')}}" placeholder="密码"><br>
                     确认密码<input type="password" name="password_confirmation" class="form-control" value="{{old('password_confirmation')}}" placeholder="确认密码" ><br>
+                    邮箱<input type="text" name="email" class="form-control" value="{{old('email')}}" placeholder="邮箱"><br>
                     <p><strong>商家详细信息</strong></p>
                     商户名称<input type="text" name="shop_name" class="form-control" value="{{old('shop_name')}}" placeholder="必填"><br>
                     商户分类 <select name="category_id"class="form-control">

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Model\Admin;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -20,7 +22,8 @@ class AdminController extends Controller
     //添加表单
     public function create()
     {
-        return view('admin/create');
+        $roles=Role::get();
+        return view('admin/create',compact('roles'));
     }
     //添加保存
     public function store(Request $request)
@@ -28,7 +31,8 @@ class AdminController extends Controller
         $this->validate($request,[
             'name'=>'required|min:2',
             'password'=>'required|confirmed|min:6',
-            'phone'=>'required|regex:/^1[34578][0-9]{9}$/'
+            'phone'=>'required|regex:/^1[34578][0-9]{9}$/|unique:admins',
+            'role_id'=>'required'
         ],[
             'name.required'=>'用户名不能为空',
             'name.min'=>'用户名不能小于2位',
@@ -38,21 +42,67 @@ class AdminController extends Controller
             'phone.required'=>'手机不能为空',
             'phone.regex'=>'手机格式不正确',
         ]);
-        Admin::create([
+        $admin=Admin::create([
             'name'=>$request->name,
             'password'=>bcrypt($request->password),
             'phone'=>$request->phone,
         ]);
+        $admin->attachRoles($request->role_id);
         //提示成功
         session()->flash('success','添加用户成功');
         return redirect()->route('admin.index');
     }
-    //列表
+    //管理员列表
     public function index(){
         $admins=Admin::all();
         return view('admin/index',compact('admins'));
     }
-    //修改个人信息
+
+    public function show(Admin $admin)
+    {
+        $roles=Role::get();
+        return view('admin/show',compact('admin','roles'));
+    }
+    //修改管理员表单
+    public function edit(Admin $admin)
+    {
+        $roles=Role::get();
+        return view('admin/edit',compact('admin','roles'));
+    }
+    //保存修改
+    public function update(Request $request,Admin $admin)
+    {
+
+        $this->validate($request,[
+            'name'=>'required|min:2',
+            'phone'=>[
+                'required',
+                'regex:/^1[34578][0-9]{9}$/',
+                Rule::unique('admins')->ignore($admin->id)
+            ],
+            'role_id'=>'required'
+        ],[
+            'name.required'=>'用户名不能为空',
+            'name.min'=>'用户名不能小于2位',
+            'phone.required'=>'手机不能为空',
+            'phone.regex'=>'手机格式不正确',
+        ]);
+        $admin->update([
+            'name'=>$request->name,
+            'password'=>bcrypt($request->password),
+            'phone'=>$request->phone,
+        ]);
+        $admin->syncRoles($request->role_id);
+        session()->flash('success','修改成功');
+        return redirect()->route('admin.index');
+    }
+    //删除管理员
+    public function destroy(Admin $admin)
+    {
+        $admin->delete();
+        echo 'success';
+    }
+
     //修改密码
     public function editPwd(Request $request,Admin $admin)
     {

@@ -8,7 +8,7 @@ class ShopAccount extends Model
 {
     //
     protected $fillable=[
-        'name','password','status','shop_detail_id'
+        'name','password','status','shop_detail_id','email'
     ];
 
     public function shopDetail()
