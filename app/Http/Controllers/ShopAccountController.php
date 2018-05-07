@@ -41,12 +41,12 @@ class ShopAccountController extends Controller
     //保存
     public function store(Request $request)
     {
-//        dd($request->input());
+
         //验证
         $this->validate($request, [
             'name' => 'required|regex:/^1[34578][0-9]{9}$/
 ',
-            'email'=>'required|regex:/\w+([-+.\']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/|unique:shopAccounts',
+            'email'=>'required|regex:/\w+([-+.\']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/|unique:shop_accounts',
             'password' => 'required|confirmed|min:6',
             'shop_name' => 'required|unique:shop_details',
             'start_send' => 'required',
@@ -71,8 +71,6 @@ class ShopAccountController extends Controller
 
         ]);
         //保存图片
-
-
         //保存
         DB::transaction(function () use ($request) {
 
@@ -116,8 +114,6 @@ class ShopAccountController extends Controller
 
 
     }
-
-
     //禁用账号
     public function disabled(ShopAccount $shopAccount)
     {
