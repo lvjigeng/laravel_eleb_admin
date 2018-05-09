@@ -11,7 +11,7 @@ class UploadController extends Controller
 
     public function upload(Request $request)
     {
-        $imgPath=$request->file('file')->store($request->dir);
+        $imgPath=$request->file('file')->store($request->dir);  //store存储上传的文件并返回路径
         $client = App::make('aliyun-oss');
         try{
             $client->uploadFile('eleb', $imgPath, storage_path('app/'.$imgPath));
