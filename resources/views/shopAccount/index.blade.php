@@ -3,7 +3,11 @@
 @section('title','店铺列表')
 
 @section('content')
-    <a href="{{route('shopAccount.create')}}" class="btn btn-primary">添加商铺</a>
+    <form action="{{route('shopAccount')}}" class="navbar-form navbar-left" method="get">
+        <input type="text" name="keywords" class="form-control">
+        <input type="submit" value="搜索" class="form-control" >
+    </form>
+    <a href="{{route('shopAccount.create')}}" class="btn btn-primary" style="margin-top: 8px">添加商铺</a>
     <table class="table table-hover">
         <tr>
             <th>商家账号</th>

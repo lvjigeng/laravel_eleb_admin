@@ -12,6 +12,7 @@ class ActivityPrizeController extends Controller
     public function create(Request $request)
     {
         $activity_id=$request->activity_id;
+
         $activities=Activity::get();
         return view('activityPrize/create',compact('activities','activity_id'));
     }
@@ -20,11 +21,9 @@ class ActivityPrizeController extends Controller
     {
 //        dd($request->input());
         $this->validate($request,[
-            'activity_id'=>'required',
             'name'=>'required',
             'description'=>'required'
         ],[
-            'activity_id.required'=>'请选择活动',
             'name.required'=>'奖品名称不能为空',
             'description.required'=>'奖品描述不能为空',
         ]);

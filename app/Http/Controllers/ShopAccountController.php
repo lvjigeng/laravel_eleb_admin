@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\ShopAccount;
 use App\Model\ShopCategory;
 use App\Model\ShopDetail;
+use App\SphinxClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -21,10 +22,39 @@ class ShopAccountController extends Controller
         ]);
     }
     //店铺列表
-    public function index()
+    public function index(Request $request)
     {
-        $shopAccounts=ShopAccount::all();
+
+        //实例化分词搜索的类
+        if ($request->keywords!=''){
+            $cl = new SphinxClient();
+            $cl->SetServer ( '127.0.0.1', 9312);
+//$cl->SetServer ( '10.6.0.6', 9312);
+//$cl->SetServer ( '10.6.0.22', 9312);
+//$cl->SetServer ( '10.8.8.2', 9312);
+            $cl->SetConnectTimeout ( 10 );
+            $cl->SetArrayResult ( true );
+// $cl->SetMatchMode ( SPH_MATCH_ANY);
+            $cl->SetMatchMode ( SPH_MATCH_EXTENDED2);
+            $cl->SetLimits(0, 1000);
+            $info = $request->keywords;
+            $res = $cl->Query($info, 'shops');//shopstore_search
+//            dd($res);
+           if ($res['total']){
+               $datas=collect($res['matches'])->pluck('id')->toArray();
+
+               $shopAccounts=ShopAccount::whereIn('shop_detail_id',$datas)->get();
+
+           }else{
+               session()->flash('danger','没有搜索到相关店铺,请换个词搜索');
+               return back();
+           }
+
+        }else{
+            $shopAccounts=ShopAccount::all();
+        }
         return view('shopAccount/index',compact('shopAccounts'));
+
     }
     //店铺详情
     public function show(ShopAccount $shopAccount)

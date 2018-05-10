@@ -102,7 +102,8 @@ class ActivityController extends Controller
             'detail.required' => '请填写内容',
         ]);
         //保存
-        $activity->where('id', $request->id)
+//        dd($request->input());
+        $activity
             ->update([
                 'title' => $request->title,
                 'start_time' => strtotime($request->start_time),
@@ -133,6 +134,13 @@ class ActivityController extends Controller
     //活动开奖
     public function lottery(Request $request)
     {
+        //报名人数
+        $count = ActivityMember::where('activity_id', $request->activity_id)->count();
+        //判断报名人数等于0时不能开奖
+        if ($count==0){
+            session()->flash('success','报名人数为0,不能开奖');
+            return back();
+        }
         //报名人的id
         $shopAccount_ids = ActivityMember::where('activity_id', $request->activity_id)->pluck('shopAccount_id')->shuffle();
         //奖品的id
@@ -165,7 +173,10 @@ class ActivityController extends Controller
     {
 
         //获取活动对应的中奖名单
-        $winning = ActivityPrize::where('activity_id', $request->activity_id)->get();
+        $winning = ActivityPrize::where([
+            ['activity_id', $request->activity_id],
+            ['shopAccount_id','<>','']
+        ])->get();
 //        dd($winning);
         foreach ($winning as $value) {
             $value->shopAccount_name=ShopAccount::where('id',$value->shopAccount_id)->first()->name;
